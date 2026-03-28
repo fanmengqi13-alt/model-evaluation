@@ -7,12 +7,12 @@ import os
 from streamlit.components.v1 import html
 
 st.set_page_config(
-    page_title="AI生图能力对比工具",
+    page_title="AI模型生图能力对比工具",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
-        'About': "AI生图能力对比工具 - 对比不同AI生图模型的能力表现"
+        'About': "AI模型生图能力对比工具 - 对比不同AI生图模型的能力表现"
     }
 )
 
@@ -192,7 +192,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("AI生图能力对比工具")
+st.title("AI模型生图能力对比工具")
 st.markdown("<p style='font-size: 0.75rem; color: #888; margin-top: -0.5rem;'>本评测数据集最后更新于2026 年 3 月 28 日，评测结果基于单次生成采样获取，数据结果仅供参考。</p>", unsafe_allow_html=True)
 st.markdown("---")
 
@@ -281,14 +281,6 @@ model_colors = [
 
 model_color_map = {model: model_colors[i % len(model_colors)] for i, model in enumerate(model_columns)}
 
-st.subheader("选择测试类别")
-selected_category = st.multiselect(
-    "测试类别",
-    test_categories,
-    default=test_categories,
-    label_visibility="collapsed"
-)
-
 st.subheader("选择模型")
 selected_models = st.multiselect(
     "模型列表",
@@ -297,6 +289,8 @@ selected_models = st.multiselect(
     label_visibility="collapsed"
 )
 
+# 默认显示所有测试类别
+selected_category = test_categories
 filtered_df = valid_rows[valid_rows['测试大类_简化'].isin(selected_category)]
 
 # 模型上线时间轴
@@ -321,31 +315,32 @@ model_timeline = [
     ("Vidu-Q3 Pro", "2026年3月"),
 ]
 
-# 创建时间轴HTML - 使用两行布局，自动换行
+# 创建时间轴HTML - 日期在上，圆点在时间轴上，模型在下
 timeline_html = """
 <style>
 .timeline-container {
-    padding: 20px 0;
+    padding: 15px 0;
     margin: 10px 0;
     width: 100%;
+    background: transparent;
 }
 .timeline-row {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
-    padding: 30px 0;
+    padding: 35px 0 20px 0;
     margin: 10px 0;
 }
 .timeline-row::before {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 58px;
     left: 5%;
     right: 5%;
-    height: 4px;
-    background: linear-gradient(to right, #636EFA, #EF553B, #00CC96, #AB63FA, #FFA15A);
-    transform: translateY(-50%);
+    height: 3px;
+    background: linear-gradient(to right, #636EFA, #EF553B, #00CC96, #AB63FA, #FFA15A, #19D3F3, #FF6692);
+    z-index: 0;
 }
 .timeline-item {
     display: flex;
@@ -354,14 +349,16 @@ timeline_html = """
     position: relative;
     padding: 0 5px;
     z-index: 1;
+    min-width: 70px;
+    max-width: 110px;
 }
-.timeline-dot {
-    width: 14px;
-    height: 14px;
-    background: white;
-    border: 3px solid #636EFA;
-    border-radius: 50%;
-    margin: 8px 0;
+.timeline-marker {
+    font-size: 0.7rem;
+    color: #636EFA;
+    font-weight: bold;
+    line-height: 1;
+    margin: 5px 0;
+    z-index: 2;
 }
 .timeline-date {
     font-size: 0.7rem;
@@ -369,14 +366,16 @@ timeline_html = """
     font-weight: 500;
     text-align: center;
     margin-bottom: 5px;
+    white-space: nowrap;
 }
 .timeline-model {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #333;
     font-weight: 600;
     text-align: center;
-    max-width: 120px;
-    line-height: 1.2;
+    line-height: 1.3;
+    margin-top: 5px;
+    max-width: 100px;
 }
 </style>
 <div class="timeline-container">
@@ -388,7 +387,7 @@ for i, (model, date) in enumerate(model_timeline[:7]):
     timeline_html += f"""
         <div class="timeline-item">
             <div class="timeline-date">{date}</div>
-            <div class="timeline-dot"></div>
+            <div class="timeline-marker">●</div>
             <div class="timeline-model">{model}</div>
         </div>
 """
@@ -403,7 +402,7 @@ for i, (model, date) in enumerate(model_timeline[7:]):
     timeline_html += f"""
         <div class="timeline-item">
             <div class="timeline-date">{date}</div>
-            <div class="timeline-dot"></div>
+            <div class="timeline-marker">●</div>
             <div class="timeline-model">{model}</div>
         </div>
 """
@@ -413,10 +412,10 @@ timeline_html += """
 </div>
 """
 
-html(timeline_html, height=280)
+html(timeline_html, height=350)
 
 st.markdown("---")
-st.header("模型总分对比")
+st.header("模型综合分数")
 
 scores_data = []
 for model in selected_models:
@@ -460,7 +459,7 @@ if scores_data:
 
 st.markdown("---")
 if '文生图' in selected_category:
-    st.header("文成图综合分数对比")
+    st.header("文生图功能分数")
     
     wensheng_df = filtered_df[filtered_df['测试大类_简化'] == '文生图']
     scores_data = []
@@ -505,7 +504,7 @@ if '文生图' in selected_category:
 
 if '图生图' in selected_category:
     st.markdown("---")
-    st.header("图生图综合分数对比")
+    st.header("图生图功能分数")
     
     tusheng_df = filtered_df[filtered_df['测试大类_简化'] == '图生图']
     scores_data = []
@@ -649,7 +648,7 @@ if '图生图' in selected_category:
         st.plotly_chart(fig_dim, use_container_width=True)
 
 st.markdown("---")
-st.header("雷达图对比")
+st.header("雷达图综合对比")
 
 radar_models = st.multiselect(
     "选择要对比的模型",
@@ -954,7 +953,7 @@ if '图生图' in selected_category:
         st.info("暂无图生图数据")
 
 st.markdown("---")
-st.header("生成图片展示")
+st.header("测试样本")
 
 image_base_dir = "images"
 
