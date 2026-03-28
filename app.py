@@ -321,71 +321,89 @@ model_timeline = [
     ("Vidu-Q3 Pro", "2026年3月"),
 ]
 
-# 创建时间轴HTML
+# 创建时间轴HTML - 使用两行布局，自动换行
 timeline_html = """
 <style>
 .timeline-container {
-    overflow-x: auto;
     padding: 20px 0;
     margin: 10px 0;
+    width: 100%;
 }
-.timeline {
+.timeline-row {
     display: flex;
-    min-width: 1200px;
+    justify-content: space-around;
+    align-items: center;
     position: relative;
-    padding: 20px 0;
+    padding: 30px 0;
+    margin: 10px 0;
 }
-.timeline::before {
+.timeline-row::before {
     content: '';
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 5%;
+    right: 5%;
     height: 4px;
     background: linear-gradient(to right, #636EFA, #EF553B, #00CC96, #AB63FA, #FFA15A);
     transform: translateY(-50%);
 }
 .timeline-item {
-    flex: 1;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
-    padding: 0 10px;
+    padding: 0 5px;
+    z-index: 1;
 }
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 12px;
-    height: 12px;
+.timeline-dot {
+    width: 14px;
+    height: 14px;
     background: white;
     border: 3px solid #636EFA;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+    margin: 8px 0;
 }
 .timeline-date {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #666;
-    margin-bottom: 25px;
     font-weight: 500;
+    text-align: center;
+    margin-bottom: 5px;
 }
 .timeline-model {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #333;
-    margin-top: 25px;
     font-weight: 600;
-    white-space: nowrap;
+    text-align: center;
+    max-width: 120px;
+    line-height: 1.2;
 }
 </style>
 <div class="timeline-container">
-    <div class="timeline">
+    <div class="timeline-row">
 """
 
-for model, date in model_timeline:
+# 第一行：前7个模型
+for i, (model, date) in enumerate(model_timeline[:7]):
     timeline_html += f"""
         <div class="timeline-item">
             <div class="timeline-date">{date}</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-model">{model}</div>
+        </div>
+"""
+
+timeline_html += """
+    </div>
+    <div class="timeline-row">
+"""
+
+# 第二行：后7个模型
+for i, (model, date) in enumerate(model_timeline[7:]):
+    timeline_html += f"""
+        <div class="timeline-item">
+            <div class="timeline-date">{date}</div>
+            <div class="timeline-dot"></div>
             <div class="timeline-model">{model}</div>
         </div>
 """
@@ -395,7 +413,7 @@ timeline_html += """
 </div>
 """
 
-html(timeline_html, height=150, scrolling=True)
+html(timeline_html, height=280)
 
 st.markdown("---")
 st.header("模型总分对比")
