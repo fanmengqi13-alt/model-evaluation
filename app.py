@@ -220,7 +220,7 @@ def load_data():
     df = pd.concat([df1, df2], ignore_index=True)
     
     known_models = [
-        'ChatGPT (DALL-E 3)',
+        'GPT Image 1.5',
         'Midjourney-v6.0',
         'Nano Banana 2',
         '万相2.6',
