@@ -192,7 +192,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("AI生图能力对比工具")
-st.markdown("<p style='font-size: 0.75rem; color: #888; margin-top: -0.5rem;'>本评测数据集最后更新于2026 年 3 月 21 日，评测结果基于单次生成采样获取，数据结果仅供参考。</p>", unsafe_allow_html=True)
+st.markdown("<p style='font-size: 0.75rem; color: #888; margin-top: -0.5rem;'>本评测数据集最后更新于2026 年 3 月 28 日，评测结果基于单次生成采样获取，数据结果仅供参考。</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 def remove_brackets(text):
@@ -297,6 +297,104 @@ selected_models = st.multiselect(
 )
 
 filtered_df = valid_rows[valid_rows['测试大类_简化'].isin(selected_category)]
+
+# 模型上线时间轴
+st.markdown("---")
+st.header("模型上线时间轴")
+
+# 模型上线时间数据
+model_timeline = [
+    ("Midjourney-v6.0", "2024年2月"),
+    ("秒画（Mira Image v-1.0）", "2025年6月"),
+    ("智谱清言（GLM image）", "2025年7月"),
+    ("腾讯混元（HunyuanImage3.0-instruct）", "2025年8月"),
+    ("文心 4.5 Turbo", "2025年9月"),
+    ("豆包（Seedream4.5）", "2025年9月"),
+    ("Nano Banana 2", "2025年10月"),
+    ("Liblib（V2-flash）", "2025年10月"),
+    ("可灵（3.0 Omini）", "2025年11月"),
+    ("万相2.6", "2025年11月"),
+    ("GPT Image 1.5", "2025年12月"),
+    ("即梦（Seedream5.0 Lite）", "2026年1月"),
+    ("Vidu-Q2", "2026年1月"),
+    ("Vidu-Q3 Pro", "2026年3月"),
+]
+
+# 创建时间轴HTML
+timeline_html = """
+<style>
+.timeline-container {
+    overflow-x: auto;
+    padding: 20px 0;
+    margin: 10px 0;
+}
+.timeline {
+    display: flex;
+    min-width: 1200px;
+    position: relative;
+    padding: 20px 0;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(to right, #636EFA, #EF553B, #00CC96, #AB63FA, #FFA15A);
+    transform: translateY(-50%);
+}
+.timeline-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0 10px;
+}
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 3px solid #636EFA;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+.timeline-date {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+.timeline-model {
+    font-size: 0.8rem;
+    color: #333;
+    margin-top: 25px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+</style>
+<div class="timeline-container">
+    <div class="timeline">
+"""
+
+for model, date in model_timeline:
+    timeline_html += f"""
+        <div class="timeline-item">
+            <div class="timeline-date">{date}</div>
+            <div class="timeline-model">{model}</div>
+        </div>
+"""
+
+timeline_html += """
+    </div>
+</div>
+"""
+
+st.markdown(timeline_html, unsafe_allow_html=True)
 
 st.markdown("---")
 st.header("模型总分对比")
@@ -601,9 +699,9 @@ if len(radar_models) >= 1:
                     angularaxis=dict(tickfont=dict(size=12))
                 ),
                 showlegend=True,
-                height=600,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5, font=dict(size=11)),
-                margin=dict(l=20, r=20, t=20, b=100)
+                height=650,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(size=10)),
+                margin=dict(l=20, r=20, t=20, b=150)
             )
             st.plotly_chart(fig_radar, use_container_width=True)
 
@@ -668,9 +766,9 @@ if '文生图' in selected_category:
                         angularaxis=dict(tickfont=dict(size=12))
                     ),
                     showlegend=True,
-                    height=600,
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5, font=dict(size=11)),
-                    margin=dict(l=20, r=20, t=20, b=100)
+                    height=650,
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(size=10)),
+                    margin=dict(l=20, r=20, t=20, b=150)
                 )
                 st.plotly_chart(fig_radar, use_container_width=True)
 
@@ -735,9 +833,9 @@ if '图生图' in selected_category:
                         angularaxis=dict(tickfont=dict(size=12))
                     ),
                     showlegend=True,
-                    height=600,
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5, font=dict(size=11)),
-                    margin=dict(l=20, r=20, t=20, b=100)
+                    height=650,
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(size=10)),
+                    margin=dict(l=20, r=20, t=20, b=150)
                 )
                 st.plotly_chart(fig_radar, use_container_width=True)
 
