@@ -228,7 +228,7 @@ def load_data():
         '即梦（Seedream5.0 Lite）',
         '可灵（3.0 Omini）',
         '智谱清言（GLM image）',
-        '文心一格',
+        '文心 4.5 Turbo',
         '秒画（Mira Image v-1.0）',
         '豆包（Seedream4.5）',
         'Vidu-Q2',

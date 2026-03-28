@@ -1,4 +1,4 @@
-﻿测试大类,评测维度（主）,评测维度（其他）,统一设定建议比例,测试提示词 ,主记分点 (1-5分),GPT Image 1.5,Midjourney-v6.0,Nano Banana 2,万相2.6,腾讯混元（HunyuanImage3.0-instruct）,即梦（Seedream5.0 Lite）,可灵（3.0 Omini）,智谱清言（GLM image）,文心一格,秒画（Mira Image v-1.0）,豆包（Seedream4.5）,Vidu-Q2,Liblib（V2-flash）,Vidu-Q3 Pro
+﻿测试大类,评测维度（主）,评测维度（其他）,统一设定建议比例,测试提示词 ,主记分点 (1-5分),GPT Image 1.5,Midjourney-v6.0,Nano Banana 2,万相2.6,腾讯混元（HunyuanImage3.0-instruct）,即梦（Seedream5.0 Lite）,可灵（3.0 Omini）,智谱清言（GLM image）,文心 4.5 Turbo,秒画（Mira Image v-1.0）,豆包（Seedream4.5）,Vidu-Q2,Liblib（V2-flash）,Vidu-Q3 Pro
 文生图,"1. 多主体特征
 （多约束、强绑定）","1、指令遵循
 2、主体空间方位
