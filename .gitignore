@@ -1,0 +1,10 @@
+# 排除大文件
+data.zip
+data/
+*.xlsx
+*.xls
+
+# 排除临时文件
+__pycache__/
+*.pyc
+.DS_Store
