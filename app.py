@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import re
 import os
+from streamlit.components.v1 import html
 
 st.set_page_config(
     page_title="AI生图能力对比工具",
@@ -394,7 +395,7 @@ timeline_html += """
 </div>
 """
 
-st.markdown(timeline_html, unsafe_allow_html=True)
+html(timeline_html, height=150, scrolling=True)
 
 st.markdown("---")
 st.header("模型总分对比")
